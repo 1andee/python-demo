@@ -4,7 +4,31 @@
   <title>{% block title%}{% endblock %}</title>
  </head>
  <body>
-  {% block body %}
-  {% endblock %}
+   {% if request.user.is_authenticated %}
+     <ul>
+       <li>
+         Currently logged in as: {{ user.username }}
+         <a href="{% url 'logout' %}"><button>Logout</button></a>
+       </li>
+     </ul>
+   {% else %}
+     <ul>
+       <form action="{% url 'login' %}" method="post">
+         {% csrf_token %}
+         <input name="username" type="text"/>
+         <input name="password" type="password"/>
+         <button type="submit" value="Login"/>Login</button>
+       </form>
+     </ul>
+   {% endif %}
+
+   {% if message %}
+     <div>
+       {{ message }}
+     </div>
+   {% endif %}
+
+   {% block body %}
+   {% endblock %}
  </body>
 </html>
